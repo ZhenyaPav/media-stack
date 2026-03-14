@@ -213,7 +213,7 @@ services:
     restart: unless-stopped
 
   shoko:
-    profiles: ["no-vpn"]
+    profiles: ["shoko"]
     image: ghcr.io/shokoanime/server:latest
     container_name: shoko
     shm_size: 256m
