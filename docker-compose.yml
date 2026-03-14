@@ -212,6 +212,24 @@ services:
       - 8920:8920
     restart: unless-stopped
 
+  shoko:
+    profiles: ["no-vpn"]
+    image: ghcr.io/shokoanime/server:latest
+    container_name: shoko
+    shm_size: 256m
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Bucharest
+    volumes:
+      - shoko-config:/home/shoko/.shoko
+      - torrent-downloads:/data
+    ports:
+      - 8111:8111
+    restart: unless-stopped
+
   bazarr:
     profiles: ["vpn", "no-vpn"]
     image: hotio/bazarr:latest
@@ -305,6 +323,7 @@ volumes:
   seerr-config:
   recommendarr-data:
   bazarr-config:
+  shoko-config:
 
 networks:
   mynetwork:
