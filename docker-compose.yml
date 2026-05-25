@@ -79,7 +79,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
       - WEBUI_PORT=5080
     volumes:
       - qbittorrent-config:/config
@@ -104,7 +104,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     ports:
       - 7878:7878
     volumes:
@@ -124,7 +124,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - sonarr-config:/config
       - torrent-downloads:/downloads
@@ -148,13 +148,30 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - prowlarr-config:/config
 
     # Comment below ports if VPN is enabled.
     ports:
       - 9696:9696
+    restart: unless-stopped
+
+  whisparr:
+    profiles: ["vpn", "no-vpn"]
+    container_name: whisparr
+    image: ghcr.io/hotio/whisparr:latest
+    networks:
+      - mynetwork
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Chisinau
+    volumes:
+      - whisparr-config:/config
+      - torrent-downloads:/downloads
+    ports:
+      - 6969:6969
     restart: unless-stopped
 
   recommendarr:
@@ -184,7 +201,7 @@ services:
       - PUID=1000
       - PGID=1000
       - PORT=5055
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - seerr-config:/app/config
     ports:
@@ -200,7 +217,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - jellyfin-config:/config
       - torrent-downloads:/data
@@ -222,7 +239,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - shoko-config:/home/shoko/.shoko
       - torrent-downloads:/data
@@ -239,7 +256,7 @@ services:
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     volumes:
       - bazarr-config:/config
       - torrent-downloads:/downloads
@@ -254,7 +271,7 @@ services:
     networks:
       - mynetwork
     environment:
-      - TZ=Europe/Bucharest
+      - TZ=Europe/Chisinau
     ports:
       - 8191:8191
     restart: unless-stopped
@@ -318,6 +335,7 @@ volumes:
   radarr-config:
   sonarr-config:
   prowlarr-config:
+  whisparr-config:
   jellyfin-config:
   qbittorrent-config:
   seerr-config:
