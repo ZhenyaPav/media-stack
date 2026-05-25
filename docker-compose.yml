@@ -160,7 +160,7 @@ services:
   whisparr:
     profiles: ["vpn", "no-vpn"]
     container_name: whisparr
-    image: ghcr.io/hotio/whisparr:latest
+    image: ghcr.io/hotio/whisparr:v3
     networks:
       - mynetwork
     environment:
