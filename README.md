@@ -215,8 +215,8 @@ Recommendarr is an AI based movies/tvshows recommendation tool. To use this you 
 
 Recaparr generates spoiler-filled recaps from embedded or Bazarr-provided text subtitles. Media files remain local; only cleaned subtitle text is sent to the configured OpenAI-compatible endpoint.
 
-1. Copy the Recaparr settings from `.env.example` into `/root/media-stack/.env` on the deployment host. Set `RECAPARR_API_TOKEN`, `RECAPARR_LLM_API_KEY`, and `JELLYFIN_API_KEY`. The `.env` file is ignored by Git and should be readable only by root (`chmod 600 /root/media-stack/.env`).
-2. Create a Jellyfin API key under **Dashboard → API Keys**. Recaparr uses it to resolve MCP Jellyfin item IDs and media paths.
+1. Copy the Recaparr settings from `.env.example` into `/root/media-stack/.env` on the deployment host. Set `RECAPARR_API_TOKEN`, `RECAPARR_LLM_API_KEY`, `JELLYFIN_API_KEY`, and `JELLYFIN_USER_ID`. The `.env` file is ignored by Git and should be readable only by root (`chmod 600 /root/media-stack/.env`).
+2. Create a Jellyfin API key under **Dashboard → API Keys**. Set `JELLYFIN_USER_ID` to the ID of a Jellyfin user that can access the relevant libraries. The user ID appears in the URL when editing that user in the Jellyfin dashboard. If omitted, Recaparr automatically selects an enabled administrator or user.
 3. Connect an MCP client to `http://media.pve.internal:8182/mcp` with the header `Authorization: Bearer <RECAPARR_API_TOKEN>`. The `get_recap` tool accepts `jellyfin_id`, optional `force_regenerate`, and optional BCP-47 `language`.
 
 Sonarr and Radarr store webhook connections in their own persisted configuration; these connections cannot be configured through supported Docker Compose environment variables.
@@ -238,6 +238,8 @@ Sonarr and Radarr store webhook connections in their own persisted configuration
 5. Test and save.
 
 Recaparr tries preferred-language embedded subtitles first, followed by preferred-language external subtitles, other embedded subtitles, and other external subtitles. It supports text-based embedded tracks plus matching `.srt`, `.vtt`, `.ass`, and `.ssa` files. It does not perform speech-to-text.
+
+Recaparr logs MCP requests, webhook imports, Jellyfin lookups, cache decisions, subtitle selection, generation progress, failures, and retry times at the default `info` level. Use `docker compose logs -f recaparr` to follow activity. Set `RECAPARR_LOG_LEVEL=debug` for health-check logging as well; secrets and subtitle/recap contents are not logged.
 
 ## Configure Nginx
 
