@@ -14,6 +14,7 @@ This stack includes:
 - **Seerr:** To manage media requests
 - **Jellyfin:** Open-source media streamer
 - **Recommendarr:** For AI-powered movie and show recommendations
+- **Recaparr:** For subtitle-driven, on-demand movie and episode recaps over MCP
 
 ## Requirements
 
@@ -209,6 +210,34 @@ Recommendarr is an AI based movies/tvshows recommendation tool. To use this you 
 - Settings --> Jellyfin --> Jellyfin URL (http://jellyfin:8096) --> API Keys (Jellyfin API Key) --> User ID (Add your jellyfin user id) --> Test Connection --> Save Jellyfin settings
 - Test recommendarr: Recommendations --> Choose LLM Model from drop down list --> Enable Jellyfin Watch History toggle --> Select language --> Choose genres --> Discover recommendations
 - You should be able to see recommendations based on your Jellyfin watch history
+
+## Configure Recaparr
+
+Recaparr generates spoiler-filled recaps from embedded or Bazarr-provided text subtitles. Media files remain local; only cleaned subtitle text is sent to the configured OpenAI-compatible endpoint.
+
+1. Copy the Recaparr settings from `.env.example` into `/root/media-stack/.env` on the deployment host. Set `RECAPARR_API_TOKEN`, `RECAPARR_LLM_API_KEY`, and `JELLYFIN_API_KEY`. The `.env` file is ignored by Git and should be readable only by root (`chmod 600 /root/media-stack/.env`).
+2. Create a Jellyfin API key under **Dashboard → API Keys**. Recaparr uses it to resolve MCP Jellyfin item IDs and media paths.
+3. Connect an MCP client to `http://media.pve.internal:8182/mcp` with the header `Authorization: Bearer <RECAPARR_API_TOKEN>`. The `get_recap` tool accepts `jellyfin_id`, optional `force_regenerate`, and optional BCP-47 `language`.
+
+Sonarr and Radarr store webhook connections in their own persisted configuration; these connections cannot be configured through supported Docker Compose environment variables.
+
+### Sonarr webhook
+
+1. Open **Settings → Connect → + → Webhook**.
+2. Set URL to `http://recaparr:8080/webhooks/sonarr` and method to `POST`.
+3. Enable only **On Import Complete**.
+4. Under advanced headers, add `Authorization` with value `Bearer <RECAPARR_API_TOKEN>`.
+5. Test and save.
+
+### Radarr webhook
+
+1. Open **Settings → Connect → + → Webhook**.
+2. Set URL to `http://recaparr:8080/webhooks/radarr` and method to `POST`.
+3. Enable **On Import** and **On Upgrade**.
+4. Add the same Authorization header.
+5. Test and save.
+
+Recaparr tries preferred-language embedded subtitles first, followed by preferred-language external subtitles, other embedded subtitles, and other external subtitles. It supports text-based embedded tracks plus matching `.srt`, `.vtt`, `.ass`, and `.ssa` files. It does not perform speech-to-text.
 
 ## Configure Nginx
 

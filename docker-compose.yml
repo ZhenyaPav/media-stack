@@ -229,6 +229,36 @@ services:
       - 8920:8920
     restart: unless-stopped
 
+  recaparr:
+    profiles: ["vpn", "no-vpn"]
+    image: ghcr.io/zhenyapav/recaparr:0.1.0
+    container_name: recaparr
+    depends_on:
+      jellyfin:
+        condition: service_started
+    networks:
+      - mynetwork
+    environment:
+      - RECAPARR_API_TOKEN=${RECAPARR_API_TOKEN:?RECAPARR_API_TOKEN is required}
+      - RECAPARR_LLM_API_KEY=${RECAPARR_LLM_API_KEY:?RECAPARR_LLM_API_KEY is required}
+      - RECAPARR_LLM_BASE_URL=${RECAPARR_LLM_BASE_URL:-https://openrouter.ai/api/v1}
+      - RECAPARR_LLM_MODEL=${RECAPARR_LLM_MODEL:-deepseek/deepseek-v4-flash-latest}
+      - RECAPARR_EAGER_GENERATION=${RECAPARR_EAGER_GENERATION:-true}
+      - RECAPARR_LAZY_GENERATION=${RECAPARR_LAZY_GENERATION:-true}
+      - RECAPARR_PREFERRED_SUBTITLE_LANGUAGE=${RECAPARR_PREFERRED_SUBTITLE_LANGUAGE:-en}
+      - RECAPARR_SUMMARY_LANGUAGE=${RECAPARR_SUMMARY_LANGUAGE:-en}
+      - RECAPARR_ARR_PATH_PREFIX=/downloads
+      - RECAPARR_JELLYFIN_PATH_PREFIX=/data
+      - JELLYFIN_URL=http://jellyfin:8096
+      - JELLYFIN_API_KEY=${JELLYFIN_API_KEY:?JELLYFIN_API_KEY is required}
+      - TZ=Europe/Chisinau
+    volumes:
+      - recaparr-data:/data
+      - torrent-downloads:/media:ro
+    ports:
+      - ${RECAPARR_HOST_PORT:-8182}:8080
+    restart: unless-stopped
+
   shoko:
     profiles: ["shoko"]
     image: ghcr.io/shokoanime/server:latest
@@ -342,6 +372,7 @@ volumes:
   recommendarr-data:
   bazarr-config:
   shoko-config:
+  recaparr-data:
 
 networks:
   mynetwork:
