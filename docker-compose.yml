@@ -230,7 +230,7 @@ services:
 
   recaparr:
     profiles: ["vpn", "no-vpn"]
-    image: ghcr.io/zhenyapav/recaparr:0.1.2
+    image: ghcr.io/zhenyapav/recaparr:0.1.3
     container_name: recaparr
     depends_on:
       jellyfin:
