@@ -230,7 +230,7 @@ services:
 
   recaparr:
     profiles: ["vpn", "no-vpn"]
-    image: ghcr.io/zhenyapav/recaparr:0.1.3
+    image: ghcr.io/zhenyapav/recaparr:0.1.4
     container_name: recaparr
     depends_on:
       jellyfin:
@@ -242,6 +242,7 @@ services:
       - RECAPARR_LLM_API_KEY=${RECAPARR_LLM_API_KEY:?RECAPARR_LLM_API_KEY is required}
       - RECAPARR_LLM_BASE_URL=${RECAPARR_LLM_BASE_URL:-https://openrouter.ai/api/v1}
       - RECAPARR_LLM_MODEL=${RECAPARR_LLM_MODEL:-deepseek/deepseek-v4-flash-latest}
+      - RECAPARR_LLM_THINKING=${RECAPARR_LLM_THINKING:-}
       - RECAPARR_EAGER_GENERATION=${RECAPARR_EAGER_GENERATION:-true}
       - RECAPARR_LAZY_GENERATION=${RECAPARR_LAZY_GENERATION:-true}
       - RECAPARR_PREFERRED_SUBTITLE_LANGUAGE=${RECAPARR_PREFERRED_SUBTITLE_LANGUAGE:-en}

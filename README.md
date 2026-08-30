@@ -219,6 +219,8 @@ Recaparr generates spoiler-filled recaps from embedded or Bazarr-provided text s
 2. Create a Jellyfin API key under **Dashboard → API Keys**. Set `JELLYFIN_USER_ID` to the ID of a Jellyfin user that can access the relevant libraries. The user ID appears in the URL when editing that user in the Jellyfin dashboard. If omitted, Recaparr automatically selects an enabled administrator or user.
 3. Connect an MCP client to `http://media.pve.internal:8182/mcp` with the header `Authorization: Bearer <RECAPARR_API_TOKEN>`. The `get_recap` tool accepts `jellyfin_id`, optional `force_regenerate`, and optional BCP-47 `language`.
 
+Optional `RECAPARR_LLM_THINKING` controls the reasoning level passed to `summarize`. Supported values are `none`, `low`, `medium`, `high`, and `xhigh`. When unset, Recaparr omits the `--thinking` parameter and leaves the model/provider default unchanged.
+
 Sonarr and Radarr store webhook connections in their own persisted configuration; these connections cannot be configured through supported Docker Compose environment variables.
 
 ### Sonarr webhook
