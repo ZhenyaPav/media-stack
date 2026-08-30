@@ -239,7 +239,7 @@ Sonarr and Radarr store webhook connections in their own persisted configuration
 
 Recaparr tries preferred-language embedded subtitles first, followed by preferred-language external subtitles, other embedded subtitles, and other external subtitles. It supports text-based embedded tracks plus matching `.srt`, `.vtt`, `.ass`, and `.ssa` files. It does not perform speech-to-text.
 
-Recaparr logs MCP requests, webhook imports, Jellyfin lookups, cache decisions, subtitle selection, generation progress, failures, and retry times at the default `info` level. Use `docker compose logs -f recaparr` to follow activity. Set `RECAPARR_LOG_LEVEL=debug` for health-check logging as well; secrets and subtitle/recap contents are not logged.
+Recaparr logs MCP requests, webhook imports, Jellyfin lookups, cache decisions, subtitle selection, generation progress, generated recap text, failures, and retry times at the default `info` level. Use `docker compose logs -f recaparr` to follow activity. Set `RECAPARR_LOG_LEVEL=debug` for health-check logging as well; secrets and subtitle contents are not logged.
 
 ## Configure Nginx
 
